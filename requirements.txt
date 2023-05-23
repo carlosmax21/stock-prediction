@@ -4,3 +4,5 @@ pandas
 numpy
 plotly
 ta
+scikit-learn==1.2.1
+tensorflow
