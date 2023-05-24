@@ -94,7 +94,7 @@ st.plotly_chart(fig, use_container_width=True)
 
 scaled_data = scale_data(stock_data, scaler)
 
-predict_stock_price = predict_future(model, scaler, scaled_data, 30)
+predict_stock_price = predict_future(model, scaler, scaled_data, 90)
 
 predict_stock_price_df = pd.DataFrame(predict_stock_price, columns=['Prediction'])
 predict_stock_price_df.index = range(1, len(predict_stock_price_df) + 1)
