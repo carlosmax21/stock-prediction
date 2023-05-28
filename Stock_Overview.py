@@ -71,9 +71,9 @@ if stock_data is not None:
     # Explanation of MACD
     st.write("**MACD (Moving Average Convergence Divergence):**")
     st.write("MACD is a trend-following momentum indicator that consists of two lines: the MACD line and the signal line. MACD crossovers and divergences can indicate potential buy or sell signals.")
-
-
+    
     fig_general = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
+
     # Add candlestick chart
     fig_general.add_trace(
         go.Candlestick(x=stock_data.index,
@@ -84,20 +84,24 @@ if stock_data is not None:
                        name="Candlestick"),
         row=1, col=1
     )
+
     # Update candlestick chart properties
     fig_general.update_traces(decreasing_line_color='red', increasing_line_color='green', row=1, col=1)
+
     # Add 20-day SMA
     sma_20 = stock_data['Adj Close'].rolling(window=20).mean()
     fig_general.add_trace(
         go.Scatter(x=stock_data.index, y=sma_20, name="20-day SMA", line=dict(color='blue')),
         row=1, col=1
     )
+
     # Add 100-day SMA
     sma_100 = stock_data['Adj Close'].rolling(window=100).mean()
     fig_general.add_trace(
         go.Scatter(x=stock_data.index, y=sma_100, name="100-day SMA", line=dict(color='yellow')),
         row=1, col=1
     )
+
     # Add line chart for adjusted close price
     fig_general.add_trace(
         go.Scatter(x=stock_data.index, y=stock_data['Adj Close'], name="Adjusted Close"),
@@ -115,6 +119,15 @@ if stock_data is not None:
     # Update volume chart properties
     fig_general.update_yaxes(title_text="Volume", row=2, col=1)
 
+    # Update layout
+    fig_general.update_layout(
+        title=f"{long_name} Stock Data and Simple Moving Average",
+        xaxis_rangeslider_visible=False,
+        showlegend=True,
+        height=800,
+        template='plotly_dark'
+    )
+
     # Create a separate figure for RSI
     fig_rsi = make_subplots(rows=1, cols=1, shared_xaxes=True)
 
@@ -131,6 +144,14 @@ if stock_data is not None:
 
     # Update RSI chart properties
     fig_rsi.update_yaxes(title_text="RSI", row=1, col=1)
+    
+    fig_rsi.update_layout(
+        title=f"{long_name} Relative Strength Index",
+        xaxis_rangeslider_visible=False,
+        showlegend=True,
+        height=500,
+        template='plotly_dark'
+    )
     
     # Create a separate figure for MACD
     fig_macd = make_subplots(rows=1, cols=1, shared_xaxes=True)
@@ -159,6 +180,14 @@ if stock_data is not None:
 
     # Update MACD chart properties
     fig_macd.update_yaxes(title_text="MACD", row=1, col=1)
+    
+    fig_macd.update_layout(
+        title=f"{long_name} Moving Average Convergence Divergence",
+        xaxis_rangeslider_visible=False,
+        showlegend=True,
+        height=500,
+        template='plotly_dark'
+    )
 
     # Display the charts
     st.plotly_chart(fig_general, use_container_width=True)

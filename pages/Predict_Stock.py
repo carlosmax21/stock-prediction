@@ -82,8 +82,9 @@ predict_stock_price = predict_future(model, scaler, scaled_data, 30)
 predict_stock_price_df = pd.DataFrame(predict_stock_price, columns=['Prediction'])
 predict_stock_price_df.index = range(1, len(predict_stock_price_df) + 1)
 
-# Plot stock data
-fig = go.Figure(data=go.Scatter(x=stock_data.index, y=stock_data['Adj Close']))
+st.header("Stock Data")
+
+fig = go.Figure(data=go.Scatter(x=stock_data.index, y=stock_data['Adj Close'], name="Adjusted Close"))
 fig.update_layout(
     title=f"Stock Adjusted Close",
     xaxis_title="Date",
@@ -94,8 +95,11 @@ fig.update_layout(
 )
 st.plotly_chart(fig, use_container_width=True)
 
+st.header("Stock Prediction")
+st.write("Predict stock for the next 30 days using LSTM model")
+
 # Plot predicted stock prices
-fig_pred = go.Figure(data=go.Scatter(x=predict_stock_price_df.index, y=predict_stock_price_df['Prediction']))
+fig_pred = go.Figure(data=go.Scatter(x=predict_stock_price_df.index, y=predict_stock_price_df['Prediction'], name="Prediction"))
 fig_pred.update_layout(
     title=f"Stock Prediction",
     xaxis_title="Days",
@@ -104,7 +108,16 @@ fig_pred.update_layout(
     height=500,
     template='plotly_dark'
 )
-st.plotly_chart(fig_pred, use_container_width=True)
+
+
+tab1, tab2 = st.tabs(["Chart", "Data"])
+
+with tab1:
+    st.plotly_chart(fig_pred, use_container_width=True)
+    
+with tab2:
+    st.dataframe(predict_stock_price_df)
+
 
 mean_returns = np.mean(predict_stock_price)
 std_returns = np.std(predict_stock_price)
@@ -112,4 +125,6 @@ confidence_level = 0.95
 var = abs(stats.norm.ppf(1 - confidence_level, mean_returns, std_returns))
 
 # Display VaR
+st.header("Value at Risk")
+st.write("Value at risk is a value used to report maximum loss from holding an asset during a certain period at a certain level of probability")
 st.write(f"Value at Risk (VaR) at {confidence_level*100}% confidence level: {var}")
