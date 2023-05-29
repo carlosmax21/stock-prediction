@@ -1,7 +1,5 @@
 import streamlit as st
 import yfinance as yf
-import pandas as pd
-import numpy as np
 import datetime as dt
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -58,15 +56,15 @@ if stock_data is not None:
     st.dataframe(stock_data.tail())
     
     st.subheader("Technical Indicator")
-    st.write("Technical indicators help analyze stock price trends and identify potential opportunities. Here's a brief explanation of some indicators used:")
+    st.write("Technical indicators help analyze stock price trends and identify potential opportunities.")
 
     # Explanation of RSI
     st.write("**RSI (Relative Strength Index):**")
-    st.write("RSI is a momentum oscillator that measures the speed and change of price movements. It oscillates between 0 and 100, with values above 70 indicating overbought conditions and values below 30 indicating oversold conditions.")
+    st.write("RSI is a momentum indicator used in technical analysis. RSI measures the speed and magnitude of a security's recent price changes to evaluate overvalued or undervalued conditions in the price of that security.")
 
     # Explanation of SMA
     st.write("**SMA (Simple Moving Average):**")
-    st.write("SMA calculates the average price of a security over a specified time period. It helps identify trends by smoothing out price fluctuations and can be used to determine support and resistance levels.")
+    st.write("SMA is a moving average which is calculated by adding up the most recent prices and then dividing that number by the number of time periods in the average calculation. SMA facilitates the observation of security price trends. If the simple moving average is rising, it means that the security's price is rising. If it points downwards, it means that the security price is falling")
 
     # Explanation of MACD
     st.write("**MACD (Moving Average Convergence Divergence):**")

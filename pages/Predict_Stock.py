@@ -6,7 +6,6 @@ import datetime as dt
 import tensorflow as tf
 import pickle
 import plotly.graph_objects as go
-from sklearn.preprocessing import MinMaxScaler
 import scipy.stats as stats
 
 # Title
