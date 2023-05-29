@@ -89,7 +89,7 @@ fig.update_layout(
     xaxis_title="Date",
     yaxis_title="Adjusted Close",
     showlegend=True,
-    height=500,
+    height=400,
     template='plotly_dark'
 )
 st.plotly_chart(fig, use_container_width=True)
@@ -104,7 +104,7 @@ fig_pred.update_layout(
     xaxis_title="Days",
     yaxis_title="Adjusted Close",
     showlegend=True,
-    height=500,
+    height=400,
     template='plotly_dark'
 )
 
@@ -126,4 +126,4 @@ var = abs(stats.norm.ppf(1 - confidence_level, mean_returns, std_returns))
 # Display VaR
 st.header("Value at Risk")
 st.write("Value at risk is a value used to report maximum loss from holding an asset during a certain period at a certain level of probability")
-st.write(f"Value at Risk (VaR) at {confidence_level*100}% confidence level: {var}")
+st.write(f"Value at Risk (VaR) at {confidence_level*100}% confidence level: {round(var, 4)}")

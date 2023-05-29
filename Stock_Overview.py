@@ -122,7 +122,7 @@ if stock_data is not None:
         title=f"{long_name} Stock Data and Simple Moving Average",
         xaxis_rangeslider_visible=False,
         showlegend=True,
-        height=800,
+        height=600,
         template='plotly_dark'
     )
 
@@ -147,7 +147,7 @@ if stock_data is not None:
         title=f"{long_name} Relative Strength Index",
         xaxis_rangeslider_visible=False,
         showlegend=True,
-        height=500,
+        height=300,
         template='plotly_dark'
     )
     
@@ -183,7 +183,7 @@ if stock_data is not None:
         title=f"{long_name} Moving Average Convergence Divergence",
         xaxis_rangeslider_visible=False,
         showlegend=True,
-        height=500,
+        height=300,
         template='plotly_dark'
     )
 
