@@ -71,7 +71,6 @@ def predict_future(model, scaler, scaled_data, future_days):
         prediction = model.predict(input_data)
         inverse_prediction = scaler.inverse_transform(prediction)
         predictions.append(inverse_prediction[0][0])
-        scaled_data = scaled_data[1:]
         scaled_data = np.append(scaled_data, [[prediction][0][0]], axis=0)
     return predictions
 

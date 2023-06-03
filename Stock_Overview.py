@@ -1,5 +1,7 @@
 import streamlit as st
 import yfinance as yf
+import pandas as pd
+import numpy as np
 import datetime as dt
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -50,21 +52,27 @@ st.write(long_name, "(", stock_info["symbol"], ")", " - ", stock_info["country"]
 st.write(stock_info["sector"], " - ", stock_info["industry"])
 st.write(stock_info["longBusinessSummary"])
 
-if stock_data is not None:
+if not start_date <= end_date:
+    st.error("Please enter a correct date range, End date must be after start date.")
+elif not start_date <= default_end_date:
+    st.error("Please enter a correct date range, Start date can't be earlier than today.")
+elif selected_symbol not in stock_symbols:
+    st.error("Invalid stock symbol.")
+else:
     st.header("Stock Data:")
     st.write("Showing the latest data from stock")
     st.dataframe(stock_data.tail())
     
     st.subheader("Technical Indicator")
-    st.write("Technical indicators help analyze stock price trends and identify potential opportunities.")
+    st.write("Technical indicators help analyze stock price trends and identify potential opportunities. Here's a brief explanation of some indicators used:")
 
     # Explanation of RSI
     st.write("**RSI (Relative Strength Index):**")
-    st.write("RSI is a momentum indicator used in technical analysis. RSI measures the speed and magnitude of a security's recent price changes to evaluate overvalued or undervalued conditions in the price of that security.")
+    st.write("RSI is a momentum oscillator that measures the speed and change of price movements. It oscillates between 0 and 100, with values above 70 indicating overbought conditions and values below 30 indicating oversold conditions.")
 
     # Explanation of SMA
     st.write("**SMA (Simple Moving Average):**")
-    st.write("SMA is a moving average which is calculated by adding up the most recent prices and then dividing that number by the number of time periods in the average calculation. SMA facilitates the observation of security price trends. If the simple moving average is rising, it means that the security's price is rising. If it points downwards, it means that the security price is falling")
+    st.write("SMA calculates the average price of a security over a specified time period. It helps identify trends by smoothing out price fluctuations and can be used to determine support and resistance levels.")
 
     # Explanation of MACD
     st.write("**MACD (Moving Average Convergence Divergence):**")
@@ -122,7 +130,7 @@ if stock_data is not None:
         title=f"{long_name} Stock Data and Simple Moving Average",
         xaxis_rangeslider_visible=False,
         showlegend=True,
-        height=600,
+        height=800,
         template='plotly_dark'
     )
 
@@ -147,7 +155,7 @@ if stock_data is not None:
         title=f"{long_name} Relative Strength Index",
         xaxis_rangeslider_visible=False,
         showlegend=True,
-        height=300,
+        height=500,
         template='plotly_dark'
     )
     
@@ -183,7 +191,7 @@ if stock_data is not None:
         title=f"{long_name} Moving Average Convergence Divergence",
         xaxis_rangeslider_visible=False,
         showlegend=True,
-        height=300,
+        height=500,
         template='plotly_dark'
     )
 
@@ -191,5 +199,3 @@ if stock_data is not None:
     st.plotly_chart(fig_general, use_container_width=True)
     st.plotly_chart(fig_rsi, use_container_width=True)
     st.plotly_chart(fig_macd, use_container_width=True)
-else:
-    st.write("No data available for the selected stock symbol and date range.")
