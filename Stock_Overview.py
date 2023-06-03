@@ -7,6 +7,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from ta.momentum import RSIIndicator
 from ta.trend import MACD
+from streamlit_extras.dataframe_explorer import dataframe_explorer
 
 # Set Streamlit layout
 st.set_page_config(layout="wide")
@@ -28,7 +29,7 @@ st.sidebar.markdown("Stock Range")
 
 # Get user input
 stock_symbols = ["TLKM.JK", "EXCL.JK", "TBIG.JK", "TOWR.JK"]
-selected_symbol = st.sidebar.selectbox('Select a stock symbol:', stock_symbols, index=0)
+selected_symbol = st.sidebar.selectbox('Select a stock symbol:', stock_symbols)
 
 default_end_date = dt.date.today()
 default_start_date = default_end_date - dt.timedelta(days=365)
@@ -48,9 +49,17 @@ long_name = stock_info['longName'] if stock_info else selected_symbol
 
 # Display stock information
 st.header("Stock Detail")
-st.write(long_name, "(", stock_info["symbol"], ")", " - ", stock_info["country"])
-st.write(stock_info["sector"], " - ", stock_info["industry"])
-st.write(stock_info["longBusinessSummary"])
+# Company name and symbol
+st.markdown(f"**{long_name}** ({stock_info['symbol']})")
+
+# Country, sector, and industry
+st.write(f"**Country:** {stock_info['country']}")
+st.write(f"**Sector:** {stock_info['sector']}")
+st.write(f"**Industry:** {stock_info['industry']}")
+
+# Long business summary
+with st.expander("Business Summary"):
+    st.write(stock_info["longBusinessSummary"])
 
 if not start_date <= end_date:
     st.error("Please enter a correct date range, End date must be after start date.")
@@ -59,23 +68,27 @@ elif not start_date <= default_end_date:
 elif selected_symbol not in stock_symbols:
     st.error("Invalid stock symbol.")
 else:
-    st.header("Stock Data:")
-    st.write("Showing the latest data from stock")
-    st.dataframe(stock_data.tail())
-    
-    st.subheader("Technical Indicator")
+    st.header("Stock Data")
+    st.info("Showing the latest data from stock", icon="ℹ️")
+
+    # Display stock data using dataframe_explorer
+    filtered_df = dataframe_explorer(stock_data, case=False)
+    st.dataframe(filtered_df, use_container_width=True)
+
+    # Technical Indicator section
+    st.subheader("Technical Indicators")
     st.write("Technical indicators help analyze stock price trends and identify potential opportunities. Here's a brief explanation of some indicators used:")
 
     # Explanation of RSI
-    st.write("**RSI (Relative Strength Index):**")
+    st.markdown("**RSI (Relative Strength Index)**")
     st.write("RSI is a momentum oscillator that measures the speed and change of price movements. It oscillates between 0 and 100, with values above 70 indicating overbought conditions and values below 30 indicating oversold conditions.")
 
     # Explanation of SMA
-    st.write("**SMA (Simple Moving Average):**")
+    st.markdown("**SMA (Simple Moving Average)**")
     st.write("SMA calculates the average price of a security over a specified time period. It helps identify trends by smoothing out price fluctuations and can be used to determine support and resistance levels.")
 
     # Explanation of MACD
-    st.write("**MACD (Moving Average Convergence Divergence):**")
+    st.markdown("**MACD (Moving Average Convergence Divergence)**")
     st.write("MACD is a trend-following momentum indicator that consists of two lines: the MACD line and the signal line. MACD crossovers and divergences can indicate potential buy or sell signals.")
     
     fig_general = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)

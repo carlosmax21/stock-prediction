@@ -7,6 +7,8 @@ import tensorflow as tf
 import pickle
 import plotly.graph_objects as go
 import scipy.stats as stats
+import time
+from streamlit_extras.dataframe_explorer import dataframe_explorer
 
 # Title
 st.title("Stock Prediction")
@@ -65,13 +67,15 @@ scaled_data = scale_data(stock_data, scaler)
 # Predict future stock prices
 def predict_future(model, scaler, scaled_data, future_days):
     predictions = []
-    for _ in range(future_days):
-        input_data = scaled_data[-60:, :]
-        input_data = input_data.reshape((1, input_data.shape[0], input_data.shape[1]))
-        prediction = model.predict(input_data)
-        inverse_prediction = scaler.inverse_transform(prediction)
-        predictions.append(inverse_prediction[0][0])
-        scaled_data = np.append(scaled_data, [[prediction][0][0]], axis=0)
+    with st.spinner("Predicting future stock prices..."):
+        for _ in range(future_days):
+            input_data = scaled_data[-60:, :]
+            input_data = input_data.reshape((1, input_data.shape[0], input_data.shape[1]))
+            prediction = model.predict(input_data)
+            inverse_prediction = scaler.inverse_transform(prediction)
+            predictions.append(inverse_prediction[0][0])
+            scaled_data = np.append(scaled_data, [[prediction][0][0]], axis=0)
+            time.sleep(0.2)  # Add a small delay to simulate the prediction process
     return predictions
 
 predict_stock_price = predict_future(model, scaler, scaled_data, 30)
@@ -81,6 +85,7 @@ predict_stock_price_df = pd.DataFrame(predict_stock_price, columns=['Prediction'
 predict_stock_price_df.index = range(1, len(predict_stock_price_df) + 1)
 
 st.header("Stock Data")
+st.info("Showing the latest stock data", icon="ℹ️")
 
 fig = go.Figure(data=go.Scatter(x=stock_data.index, y=stock_data['Adj Close'], name="Adjusted Close"))
 fig.update_layout(
@@ -91,10 +96,19 @@ fig.update_layout(
     height=400,
     template='plotly_dark'
 )
-st.plotly_chart(fig, use_container_width=True)
+
+tab_data_1, tab_data_2 = st.tabs(["📈 Chart", "📋 Data"])
+
+with tab_data_1:
+    st.plotly_chart(fig, use_container_width=True)
+    
+with tab_data_2:
+    filtered_df = dataframe_explorer(stock_data, case=False)
+    st.dataframe(filtered_df, use_container_width=True)
+
 
 st.header("Stock Prediction")
-st.write("Predict stock for the next 30 days using LSTM model")
+st.success('Predict stock for the next 30 days using LSTM model')
 
 # Plot predicted stock prices
 fig_pred = go.Figure(data=go.Scatter(x=predict_stock_price_df.index, y=predict_stock_price_df['Prediction'], name="Prediction"))
@@ -108,12 +122,12 @@ fig_pred.update_layout(
 )
 
 
-tab1, tab2 = st.tabs(["Chart", "Data"])
+tab_predict_1, tab_predict_2 = st.tabs(["📈 Chart", "📋 Data"])
 
-with tab1:
+with tab_predict_1:
     st.plotly_chart(fig_pred, use_container_width=True)
     
-with tab2:
+with tab_predict_2:
     st.dataframe(predict_stock_price_df)
 
 
@@ -125,4 +139,4 @@ var = abs(stats.norm.ppf(1 - confidence_level, mean_returns, std_returns))
 # Display VaR
 st.header("Value at Risk")
 st.write("Value at risk is a value used to report maximum loss from holding an asset during a certain period at a certain level of probability")
-st.write(f"Value at Risk (VaR) at {confidence_level*100}% confidence level: {round(var, 4)}")
+st.info(f"Value at Risk (VaR) at {confidence_level*100}% confidence level: {round(var, 4)}", icon="💼")
