@@ -80,16 +80,36 @@ else:
     st.write("Technical indicators help analyze stock price trends and identify potential opportunities. Here's a brief explanation of some indicators used:")
 
     # Explanation of RSI
-    st.markdown("**RSI (Relative Strength Index)**")
-    st.write("RSI is a momentum oscillator that measures the speed and change of price movements. It oscillates between 0 and 100, with values above 70 indicating overbought conditions and values below 30 indicating oversold conditions.")
+    rsi_text = """
+    **RSI (Relative Strength Index)**  
+    RSI is a momentum oscillator that measures the speed and change of price movements. It oscillates between 0 and 100, with values above 70 indicating overbought conditions and values below 30 indicating oversold conditions.
+    """
 
     # Explanation of SMA
-    st.markdown("**SMA (Simple Moving Average)**")
-    st.write("SMA calculates the average price of a security over a specified time period. It helps identify trends by smoothing out price fluctuations and can be used to determine support and resistance levels.")
+    sma_text = """
+    **SMA (Simple Moving Average)**  
+    SMA calculates the average price of a security over a specified time period. It helps identify trends by smoothing out price fluctuations and can be used to determine support and resistance levels.
+    """
 
     # Explanation of MACD
-    st.markdown("**MACD (Moving Average Convergence Divergence)**")
-    st.write("MACD is a trend-following momentum indicator that consists of two lines: the MACD line and the signal line. MACD crossovers and divergences can indicate potential buy or sell signals.")
+    macd_text = """
+    **MACD (Moving Average Convergence Divergence)**  
+    MACD is a trend-following momentum indicator that consists of two lines: the MACD line and the signal line. MACD crossovers and divergences can indicate potential buy or sell signals.
+    """
+
+    # Display in cards
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        with st.expander("RSI"):
+            st.markdown(rsi_text)
+
+    with col2:
+        with st.expander("SMA"):
+            st.markdown(sma_text)
+
+    with col3:
+        with st.expander("MACD"):
+            st.markdown(macd_text)
     
     fig_general = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
 
