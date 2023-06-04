@@ -7,7 +7,6 @@ import tensorflow as tf
 import pickle
 import plotly.graph_objects as go
 import scipy.stats as stats
-import time
 from streamlit_extras.dataframe_explorer import dataframe_explorer
 
 # Title
@@ -75,7 +74,6 @@ def predict_future(model, scaler, scaled_data, future_days):
             inverse_prediction = scaler.inverse_transform(prediction)
             predictions.append(inverse_prediction[0][0])
             scaled_data = np.append(scaled_data, [[prediction][0][0]], axis=0)
-            time.sleep(0.2)  # Add a small delay to simulate the prediction process
     return predictions
 
 predict_stock_price = predict_future(model, scaler, scaled_data, 30)
@@ -108,7 +106,7 @@ with tab_data_2:
 
 
 st.header("Stock Prediction")
-st.success('Predict stock for the next 30 days using LSTM model')
+st.info('Stock prediction result for the next 30 days using LSTM model')
 
 # Plot predicted stock prices
 fig_pred = go.Figure(data=go.Scatter(x=predict_stock_price_df.index, y=predict_stock_price_df['Prediction'], name="Prediction"))
@@ -139,4 +137,4 @@ var = abs(stats.norm.ppf(1 - confidence_level, mean_returns, std_returns))
 # Display VaR
 st.header("Value at Risk")
 st.write("Value at risk is a value used to report maximum loss from holding an asset during a certain period at a certain level of probability")
-st.info(f"Value at Risk (VaR) at {confidence_level*100}% confidence level: {round(var, 4)}", icon="💼")
+st.info(f"Value at Risk (VaR) for the next 30 days at {confidence_level*100}% confidence level: {round(var, 4)}", icon="💼")
