@@ -129,17 +129,19 @@ else:
 
     # Add 20-day SMA
     sma_20 = stock_data['Adj Close'].rolling(window=20).mean()
-    fig_general.add_trace(
-        go.Scatter(x=stock_data.index, y=sma_20, name="20-day SMA", line=dict(color='blue')),
-        row=1, col=1
-    )
+    if(len(stock_data) > 20):
+        fig_general.add_trace(
+            go.Scatter(x=stock_data.index, y=sma_20, name="20-day SMA", line=dict(color='blue')),
+            row=1, col=1
+        )
 
     # Add 100-day SMA
     sma_100 = stock_data['Adj Close'].rolling(window=100).mean()
-    fig_general.add_trace(
-        go.Scatter(x=stock_data.index, y=sma_100, name="100-day SMA", line=dict(color='yellow')),
-        row=1, col=1
-    )
+    if(len(stock_data) > 100):
+        fig_general.add_trace(
+            go.Scatter(x=stock_data.index, y=sma_100, name="100-day SMA", line=dict(color='yellow')),
+            row=1, col=1
+        )
 
     # Add line chart for adjusted close price
     fig_general.add_trace(
@@ -229,6 +231,18 @@ else:
     )
 
     # Display the charts
-    st.plotly_chart(fig_general, use_container_width=True)
-    st.plotly_chart(fig_rsi, use_container_width=True)
-    st.plotly_chart(fig_macd, use_container_width=True)
+    if(len(stock_data) > 1):
+        st.plotly_chart(fig_general, use_container_width=True)
+        
+        if not np.isnan(rsi_values).all():
+            st.plotly_chart(fig_rsi, use_container_width=True)
+        else :
+            st.info("Not enough data to plot RSI", icon="ℹ️")
+            
+        if not np.isnan(macd_values).all():
+            st.plotly_chart(fig_macd, use_container_width=True)
+        else :
+            st.info("Not enough data to plot MACD", icon="ℹ️")
+   
+    else :
+        st.info("Not enough data to plot data movement", icon="ℹ️")
