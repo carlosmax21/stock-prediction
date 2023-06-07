@@ -29,7 +29,10 @@ towr_model = tf.keras.models.load_model('model/TOWR_best_model.h5')
 
 # Stock symbols
 stock_symbols = ["TLKM.JK", "EXCL.JK", "TBIG.JK", "TOWR.JK"]
-selected_symbol = st.sidebar.selectbox('Select a stock symbol:', stock_symbols)
+selected_symbol = st.sidebar.selectbox('Select a stock symbol:', stock_symbols, index=stock_symbols.index(st.session_state["ticker"]))
+st.session_state["ticker"] = selected_symbol
+if "ticker" in st.session_state:
+    selected_symbol = st.session_state['ticker']
 
 # Select model and scaler based on the symbol
 def select_model_and_scaler(symbol):

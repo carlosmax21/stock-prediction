@@ -29,6 +29,9 @@ st.sidebar.markdown("Stock Range")
 # Get user input
 stock_symbols = ["TLKM.JK", "EXCL.JK", "TBIG.JK", "TOWR.JK"]
 selected_symbol = st.sidebar.selectbox('Select a stock symbol:', stock_symbols)
+st.session_state["ticker"] = selected_symbol
+if "ticker" in st.session_state:
+    selected_symbol = st.session_state['ticker']
 
 default_end_date = dt.date.today()
 default_start_date = default_end_date - dt.timedelta(days=365)
