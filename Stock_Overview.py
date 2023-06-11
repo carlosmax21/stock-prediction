@@ -84,7 +84,7 @@ else:
     # Explanation of RSI
     rsi_text = """
     **RSI (Relative Strength Index)**  
-    RSI is a momentum oscillator that measures the speed and change of price movements. It oscillates between 0 and 100, with values above 70 indicating overbought conditions and values below 30 indicating oversold conditions.
+    RSI is a momentum oscillator that measures the speed and change of price movements. It oscillates between 0 and 100, with values above 70 indicating overvalued conditions and values below 30 indicating undervalued conditions.
     """
 
     # Explanation of SMA
